@@ -2,7 +2,7 @@
 
 (defn svg
   "Defines a root svg element as a clojure structure"
-  [width height & children]
+  [width height children]
   {:element :svg :width width :height height :children children} )
 
 (defn rect
