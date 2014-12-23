@@ -1,5 +1,11 @@
 (ns savage.svg-structure)
 
+(def restricted-keys [:element :children :center :bb-box])
+
+(defn raw-attrs
+  [element]
+  (apply dissoc element restricted-keys) )
+
 (defn svg
   "Defines a root svg element as a clojure structure"
   [width height children]
