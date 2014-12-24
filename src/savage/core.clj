@@ -2,19 +2,12 @@
   (:require [savage.svg-structure :as svg :refer [adjust-center]]
             [xml-writer.core :as xml]
             [clojure.string :as s]
-            [savage.helper :refer :all]))
-
-;; Helper from Structures
-(defmacro expose
-  [a-ns & fn-list]
-  `(do
-     ~@(for [name fn-list]
-         `(def ~name ~(symbol (str a-ns "/" name))) )))
+            [savage.helper :refer :all]
+            [savage.dsl :as dsl]))
 
 (def svg-el "Alias for svg-structure/svg" svg/svg)
-; (def circle "Alias for svg-structure/circle" svg/circle)
-(expose savage.svg-structure
-        rect circle ellipse line polyline polygon)
+
+(dsl/expose-structures)
 
 ;; DSL functions
 (defn svg
