@@ -3,12 +3,6 @@
             [clojure.string :as s]
             [clojure.template :refer [apply-template]]))
 
-(def restricted-keys [:element :children :center :bb-box])
-
-(defn raw-attrs
-  [element]
-  (apply dissoc element restricted-keys) )
-
 (defrecord SVG [element-type attrs children])
 (defn width [svg-structure] (:width (:attrs svg-structure)))
 (defn height [svg-structure] (:height (:attrs svg-structure)))
