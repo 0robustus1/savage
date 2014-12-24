@@ -1,7 +1,8 @@
 (ns savage.core
   (:require [savage.svg-structure :as svg]
             [xml-writer.core :as xml]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [savage.helper :refer :all]))
 
 ;; Helper from Structures
 (defmacro expose
@@ -26,16 +27,6 @@
   [{bb-box :bb-box :as target}]
   (assoc target :center [(+ (:x bb-box) (/ (:width bb-box) 2))
                          (+ (:y bb-box) (/ (:height bb-box) 2)) ]))
-
-(defn max-min
-  [a-list]
-  [(apply max a-list) (apply min a-list)])
-
-(defn use-nth
-  [index list-of-lists]
-  (reduce (fn [inner-list res]
-          (cons (nth index inner-list) res))))
-
 (defn dimensions
   [element]
   (case (:element element)
