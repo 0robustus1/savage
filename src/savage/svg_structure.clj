@@ -9,10 +9,9 @@
   [element]
   (apply dissoc element restricted-keys) )
 
-(defn svg
-  "Defines a root svg element as a clojure structure"
-  [width height children]
-  {:element :svg :width width :height height :children children} )
+(defrecord SVG [element-type attrs children])
+(defn width [svg-structure] (:width (:attrs svg-structure)))
+(defn height [svg-structure] (:height (:attrs svg-structure)))
 
 (defprotocol AdjustGeometricalMetadata
   (update-center-from-bbox [this])

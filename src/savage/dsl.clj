@@ -12,7 +12,12 @@
 
 (defmacro expose-structures []
   `(expose savage.dsl
-          ~'rect ~'circle ~'ellipse ~'line ~'polyline ~'polygon))
+          ~'rect ~'circle ~'ellipse ~'line ~'polyline ~'polygon ~'svg))
+
+(defn svg
+  "Creates a svg"
+  [attrs & children]
+  (svg/->SVG :svg attrs children))
 
 (defn rect
   [& rest]

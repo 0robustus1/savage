@@ -5,16 +5,9 @@
             [savage.helper :refer :all]
             [savage.dsl :as dsl]))
 
-(def svg-el "Alias for svg-structure/svg" svg/svg)
-
 (dsl/expose-structures)
 
 ;; DSL functions
-(defn svg
-  "Creates a svg"
-  [width height & children]
-  (svg-el width height children) )
-
 (defn adjust-position-relatively
   [shape
    {[source-center-x source-center-y] :center}
