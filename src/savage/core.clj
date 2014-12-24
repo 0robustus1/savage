@@ -42,3 +42,10 @@
   [svg]
   (xml/emit-sexp-str [:svg (:attrs svg)
                       (map xml-form-child (:children svg))]))
+
+(defn eval-export
+  [input-file output-file]
+  (let [res (load-file input-file)
+        xml (export-svg res)]
+    (spit output-file xml)
+    res))
