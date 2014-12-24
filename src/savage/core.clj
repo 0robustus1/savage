@@ -33,12 +33,12 @@
 
 (defn- xml-form-child
   [child]
-  [(:element child) (svg/raw-attrs child)
+  [(:element-type child) (:attrs child)
    (if (:children child)
      (map xml-form-child (:children child) []))])
 
 (defn export-svg
   "Exports a svg as xml into a String"
   [svg]
-  (xml/emit-sexp-str [:svg (svg/raw-attrs svg)
+  (xml/emit-sexp-str [:svg (:attrs svg)
                       (map xml-form-child (:children svg))]))
