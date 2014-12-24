@@ -17,7 +17,14 @@
 (defn svg
   "Creates a svg"
   [attrs & children]
-  (svg/->SVG :svg attrs children))
+  (svg/->SVG :svg
+             (assoc attrs
+                    :xmlns "http://www.w3.org/2000/svg"
+                    :viewBox (str 0 " "
+                                  0 " "
+                                  (:width attrs) " "
+                                  (:height attrs)))
+             children))
 
 (defn rect
   [& rest]
