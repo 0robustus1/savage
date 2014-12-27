@@ -25,11 +25,11 @@
 
 (defn above-center-from
   [source target y-offset]
-  (adjust-position-relatively target source [0 y-offset]))
+  (adjust-position-relatively target source [0 (* -1 y-offset)]))
 
 (defn below-center-from
   [source target y-offset]
-  (adjust-position-relatively target source [0 (* -1 y-offset)]))
+  (adjust-position-relatively target source [0 y-offset]))
 
 (defn- xml-form-child
   [child]
