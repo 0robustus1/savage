@@ -1,5 +1,5 @@
-(defproject savage "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject savage "0.0.5"
+  :description "A dsl for writing svg's."
   :url "http://rightsrestricted.com/savage"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
