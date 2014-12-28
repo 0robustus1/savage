@@ -18,8 +18,8 @@
 (defn use-nth
   "Returns a list containing the nth-element of each inner list"
   [index list-of-lists]
-  (reduce (fn [inner-list res]
-          (cons (nth index inner-list) res))))
+  (reduce (fn [res inner-list]
+            (cons (nth inner-list index) res)) [] list-of-lists))
 
 (defn assoc-record
   "Assocs a member inside of a record like 'assoc' would do"
