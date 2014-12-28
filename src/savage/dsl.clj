@@ -98,6 +98,14 @@
            :bbox {:x x :y y :width width :height height})))
 
 (defn polygon
-  "Polygon is not really supported yet."
+  "Represents a svg-polygon shape. This shape has :points as mandatory attrs
+  key."
   [& rest]
-  :none)
+  (let [attrs  (apply hash-map rest)
+        jig (svg/->Polygon :polygon [] attrs [] {})
+        points (svg/extracted-points jig)
+        [x y] (svg/positional-center jig)
+        [width height] (svg/dimensions jig)]
+    (assoc jig
+           :center [x y]
+           :bbox {:x x :y y :width width :height height})))

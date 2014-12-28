@@ -37,3 +37,14 @@
       (is (= (:center shape) (:center expected))))
     (testing "creation should set bbox correctly"
       (is (= (:bbox shape) (:bbox expected))))))
+
+(deftest create-polygon
+  (let [attrs {:points "0,0 10,5 0,10 0,0"}
+        shape (polygon :points (:points attrs))
+        expected (svg/->Polygon :polygon [] attrs
+                                 [5 5]
+                                 {:x 5 :y 5 :width 10 :height 10})]
+    (testing "creation should set center correctly"
+      (is (= (:center shape) (:center expected))))
+    (testing "creation should set bbox correctly"
+      (is (= (:bbox shape) (:bbox expected))))))
