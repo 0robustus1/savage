@@ -48,7 +48,7 @@
   (adjust-center [this center]
     (-> (assoc this :center center)
         update-bbox-from-center update-geometrical-attrs))
-  (adjust-bbox [this center]
+  (adjust-bbox [this bbox]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
   (update-geometrical-attrs [this]
@@ -74,7 +74,7 @@
   (adjust-center [this center]
     (-> (assoc this :center center)
         update-bbox-from-center update-geometrical-attrs))
-  (adjust-bbox [this center]
+  (adjust-bbox [this bbox]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
   (update-geometrical-attrs [this]
@@ -101,7 +101,7 @@
   (adjust-center [this center]
     (-> (assoc this :center center)
         update-bbox-from-center update-geometrical-attrs))
-  (adjust-bbox [this center]
+  (adjust-bbox [this bbox]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
   (update-geometrical-attrs [this]
@@ -129,7 +129,7 @@
   (adjust-center [this center]
     (-> (assoc this :center center)
         update-bbox-from-center update-geometrical-attrs))
-  (adjust-bbox [this center]
+  (adjust-bbox [this bbox]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
   (update-geometrical-attrs [this]
@@ -192,7 +192,7 @@
     (-> (assoc this :center center)
         update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox
-    [this center]
+    [this bbox]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
   (update-geometrical-attrs
