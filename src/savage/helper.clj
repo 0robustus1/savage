@@ -1,5 +1,10 @@
 (ns savage.helper)
 
+(defn as-num
+  "Evaluates a string as number. Does not include safety checks."
+  [number]
+  (Integer/parseInt number))
+
 (defn max-min
   "Returns the [max min] combination of a list of numbers"
   [list]
