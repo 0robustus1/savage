@@ -20,7 +20,8 @@
 
 (defprotocol PointsHandling
   (extracted-points [this])
-  (map-points [this callback]))
+  (map-points [this callback])
+  (positional-center [this]))
 
 (defmacro defsvg-structure
   [name & opts+specs]
@@ -199,4 +200,11 @@
            (map as-points))))
   (map-points
     [this callback]
-    (->> (extracted-points this) (map callback))))
+    (->> (extracted-points this) (map callback)))
+  (positional-center
+    [this]
+    (let [points (extracted-points this)
+          [min-x max-x] (min-max (use-nth 0 points))
+          [min-y max-y] (min-max (use-nth 1 points))]
+      [(+ min-x (/ (- max-x min-x) 2))
+       (+ min-y (/ (- max-y min-y) 2))])))
