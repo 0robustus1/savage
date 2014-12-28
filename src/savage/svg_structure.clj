@@ -23,6 +23,14 @@
   `(defrecord ~name [~'element-type ~'children ~'attrs ~'center ~'bbox]
      ~@opts+specs))
 
+(defmacro extend-types
+  "Extends multiple types with the same
+  protocol/method definition-combination."
+  [types & forms]
+  `(do
+     ~@(for [type types]
+         `(extend-type ~type ~@forms))))
+
 (defsvg-structure Rect
   AdjustGeometricalMetadata
   (update-center-from-bbox [this]
