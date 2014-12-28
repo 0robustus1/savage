@@ -162,16 +162,6 @@
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
   (update-geometrical-attrs [this] this)
-  GeometricalData
-  (dimensions [this]
-    (let [points (:points attrs)
-          point-l-fn (fn [point-s] (map num (s/split point-s ",\\s*")))
-          points-l (map point-l-fn (s/split points "\\s+"))
-          width (apply - (max-min (use-nth 0 points-l)))
-          height (apply - (max-min (use-nth 1 points-l)))]
-      [width height]))
-  (bbox-center [this]
-    [(:x bbox) (:y bbox)])
   )
 
 (defsvg-structure Polygon
@@ -189,21 +179,18 @@
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
-  (update-geometrical-attrs [this] this)
-  GeometricalData
-  (dimensions [this]
-    (let [points (:points attrs)
-          point-l-fn (fn [point-s] (map num (s/split point-s ",\\s*")))
-          points-l (map point-l-fn (s/split points "\\s+"))
-          width (apply - (max-min (use-nth 0 points-l)))
-          height (apply - (max-min (use-nth 1 points-l)))]
-      [width height]))
-  (bbox-center [this]
-    [(:x bbox) (:y bbox)])
-  )
+  (update-geometrical-attrs [this] this))
 
 (extend-types
   [Polyline Polygon]
+  GeometricalData
+  (dimensions [this]
+    (let [points (extracted-points this)
+          width (apply - (max-min (use-nth 0 points)))
+          height (apply - (max-min (use-nth 1 points)))]
+      [width height]))
+  (bbox-center [this]
+    [(:x (:bbox this)) (:y (:bbox this))])
   PointsHandling
   (extracted-points
     [this]
