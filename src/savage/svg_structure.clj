@@ -18,6 +18,10 @@
   (dimensions [this])
   (bbox-center [this]))
 
+(defprotocol PointsHandling
+  (extracted-points [this])
+  (map-points [this callback]))
+
 (defmacro defsvg-structure
   [name & opts+specs]
   `(defrecord ~name [~'element-type ~'children ~'attrs ~'center ~'bbox]
@@ -197,3 +201,15 @@
   (bbox-center [this]
     [(:x bbox) (:y bbox)])
   )
+
+(extend-types
+  [Polyline Polygon]
+  PointsHandling
+  (extracted-points
+    [this]
+    (let [as-points (fn [p] (map as-num (s/split p #"\s*,\s*")))]
+      (->> (s/split (get-in this [:attrs :points] "") #"\s+")
+           (map as-points))))
+  (map-points
+    [this callback]
+    (->> (extracted-points this) (map callback))))
