@@ -147,48 +147,8 @@
     [(:x bbox) (:y bbox)])
   )
 
-(defsvg-structure Polyline
-  AdjustGeometricalMetadata
-  (update-center-from-bbox [this]
-    (assoc this :center [(+ (:x bbox) (/ (:width bbox) 2))
-                         (+ (:y bbox) (/ (:height bbox) 2)) ]))
-  (update-bbox-from-center [this]
-    (let [[x y] center
-          [width height] (dimensions this)]
-      (assoc this :bbox {:x x :y y :width width :height height}) ))
-  (adjust-center [this center]
-    (-> (assoc this :center center)
-        update-bbox-from-center (update-geometrical-attrs)))
-  (adjust-bbox [this center]
-    (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-geometrical-attrs))
-  (update-geometrical-attrs
-    [this]
-    (let [[center-x center-y] (:center this)
-          [old-x old-y] (positional-center this)
-          x-offset (- center-x old-x)
-          y-offset (- center-y old-y)
-          join (fn [[x y]] (str (+ x x-offset) "," (+ y y-offset)))]
-      (assoc-record
-        this :attrs
-        (assoc (:attrs this) :points (s/join " " (map-points this join)))))))
-
-(defsvg-structure Polygon
-  AdjustGeometricalMetadata
-  (update-center-from-bbox [this]
-    (assoc this :center [(+ (:x bbox) (/ (:width bbox) 2))
-                         (+ (:y bbox) (/ (:height bbox) 2)) ]))
-  (update-bbox-from-center [this]
-    (let [[x y] center
-          [width height] (dimensions this)]
-      (assoc this :bbox {:x x :y y :width width :height height}) ))
-  (adjust-center [this center]
-    (-> (assoc this :center center)
-        update-bbox-from-center update-geometrical-attrs))
-  (adjust-bbox [this center]
-    (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-geometrical-attrs))
-  (update-geometrical-attrs [this] this))
+(defsvg-structure Polyline)
+(defsvg-structure Polygon)
 
 (extend-types
   [Polyline Polygon]
@@ -215,4 +175,33 @@
           [min-x max-x] (min-max (use-nth 0 points))
           [min-y max-y] (min-max (use-nth 1 points))]
       [(+ min-x (/ (- max-x min-x) 2))
-       (+ min-y (/ (- max-y min-y) 2))])))
+       (+ min-y (/ (- max-y min-y) 2))]))
+  AdjustGeometricalMetadata
+  (update-center-from-bbox
+    [this]
+    (let [bbox (:bbox this)]
+      (assoc this :center [(+ (:x bbox) (/ (:width bbox) 2))
+                           (+ (:y bbox) (/ (:height bbox) 2))])))
+  (update-bbox-from-center
+    [this]
+    (let [[x y] (:center this)
+          [width height] (dimensions this)]
+      (assoc this :bbox {:x x :y y :width width :height height})))
+  (adjust-center
+    [this center]
+    (-> (assoc this :center center)
+        update-bbox-from-center update-geometrical-attrs))
+  (adjust-bbox
+    [this center]
+    (-> (assoc this :bbox bbox)
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs
+    [this]
+    (let [[center-x center-y] (:center this)
+          [old-x old-y] (positional-center this)
+          x-offset (- center-x old-x)
+          y-offset (- center-y old-y)
+          join (fn [[x y]] (str (+ x x-offset) "," (+ y y-offset)))]
+      (assoc-record
+        this :attrs
+        (assoc (:attrs this) :points (s/join " " (map-points this join)))))))
