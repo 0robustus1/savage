@@ -1,6 +1,7 @@
 (ns savage.dsl-test
   (:require [clojure.test :refer :all]
-            [savage.dsl :refer :all]))
+            [savage.dsl :refer :all]
+            [savage.svg-structure :as svg]))
 
 (deftest empty-svg
   (testing "that calling svg with mandatory args will yield empty children"
@@ -25,3 +26,14 @@
       (is (some #{some-rect} (:children root)) "Contains the rect")
       (is (some #{some-circle} (:children root)) "Contains the circle")
       (is (some #{some-line} (:children root)) "Contains the line"))))
+
+(deftest create-polyline
+  (let [attrs {:points "0,0 10,5 0,10 0,0"}
+        shape (polyline :points (:points attrs))
+        expected (svg/->Polyline :polyline [] attrs
+                                 [5 5]
+                                 {:x 5 :y 5 :width 10 :height 10})]
+    (testing "creation should set center correctly"
+      (is (= (:center shape) (:center expected))))
+    (testing "creation should set bbox correctly"
+      (is (= (:bbox shape) (:bbox expected))))))
