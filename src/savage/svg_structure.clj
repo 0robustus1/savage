@@ -11,13 +11,8 @@
   (update-center-from-bbox [this])
   (update-bbox-from-center [this])
   (adjust-center [this center])
-  (adjust-bbox [this bbox]))
-
-(defprotocol AdjustPosition
-  (update-pos-attrs [this]))
-
-(defprotocol AdjustPositionAndSize
-  (update-pos-attrs [this]))
+  (adjust-bbox [this bbox])
+  (update-geometrical-attrs [this]))
 
 (defprotocol GeometricalData
   (dimensions [this])
@@ -39,12 +34,11 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-pos-attrs))
+        update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-pos-attrs))
-  AdjustPositionAndSize
-  (update-pos-attrs [this]
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs [this]
     (assoc-record this :attrs
                   :width (:width bbox) :height (:height bbox)
                   :x (:x bbox) :y (:y bbox)))
@@ -66,12 +60,11 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-pos-attrs))
+        update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-pos-attrs))
-  AdjustPositionAndSize
-  (update-pos-attrs [this]
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs [this]
     (assoc-record this :attrs
                   :cx (:x bbox) :cy (:y bbox)
                   :r (/ (:width bbox) 2)))
@@ -94,12 +87,11 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-pos-attrs))
+        update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-pos-attrs))
-  AdjustPositionAndSize
-  (update-pos-attrs [this]
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs [this]
     (assoc-record this :attrs
                   :cx (:x bbox) :cy (:y bbox)
                   (:rx (/ (:width bbox) 2) :ry (/ (:height bbox) 2))))
@@ -123,12 +115,11 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-pos-attrs))
+        update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-pos-attrs))
-  AdjustPositionAndSize
-  (update-pos-attrs [this]
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs [this]
     (assoc-record this :attrs
                   :x1 (- (:x bbox) (/ (:width bbox) 2))
                   :x2 (+ (:x bbox) (/ (:width bbox) 2))
@@ -154,10 +145,11 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-pos-attrs))
+        update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-pos-attrs))
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs [this] this)
   GeometricalData
   (dimensions [this]
     (let [points (:points attrs)
@@ -181,10 +173,11 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-pos-attrs))
+        update-bbox-from-center update-geometrical-attrs))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
-        update-center-from-bbox update-pos-attrs))
+        update-center-from-bbox update-geometrical-attrs))
+  (update-geometrical-attrs [this] this)
   GeometricalData
   (dimensions [this]
     (let [points (:points attrs)
