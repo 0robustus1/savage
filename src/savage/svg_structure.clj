@@ -157,7 +157,7 @@
       (assoc this :bbox {:x x :y y :width width :height height}) ))
   (adjust-center [this center]
     (-> (assoc this :center center)
-        update-bbox-from-center update-geometrical-attrs))
+        update-bbox-from-center (update-geometrical-attrs)))
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
