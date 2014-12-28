@@ -162,8 +162,16 @@
   (adjust-bbox [this center]
     (-> (assoc this :bbox bbox)
         update-center-from-bbox update-geometrical-attrs))
-  (update-geometrical-attrs [this] this)
-  )
+  (update-geometrical-attrs
+    [this]
+    (let [[center-x center-y] (:center this)
+          [old-x old-y] (positional-center this)
+          x-offset (- center-x old-x)
+          y-offset (- center-y old-y)
+          join (fn [[x y]] (str (+ x x-offset) "," (+ y y-offset)))]
+      (assoc-record
+        this :attrs
+        (assoc (:attrs this) :points (s/join " " (map-points this join)))))))
 
 (defsvg-structure Polygon
   AdjustGeometricalMetadata
