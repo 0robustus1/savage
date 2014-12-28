@@ -89,18 +89,13 @@
   key."
   [& rest]
   (let [attrs  (apply hash-map rest)
-        points (:points attrs)
-        point-l-fn (fn [point-s] (map num (s/split point-s ",\\s*")))
-        points-l (map point-l-fn (s/split points "\\s+"))
-        [max-x min-x] (max-min (use-nth 0 points-l))
-        [max-y min-y] (max-min (use-nth 1 points-l))
-        width (- max-x min-x)
-        height (- max-y min-y)
-        x (+ min-x (/ width 2))
-        y (+ min-y (/ height 2))]
-    (svg/->Polyline :polyline [] attrs
-                [x y]
-                {:x x :y y :width width :height height})))
+        jig (svg/->Polyline :polyline [] attrs [] {})
+        points (svg/extracted-points jig)
+        [x y] (svg/positional-center jig)
+        [width height] (svg/dimensions jig)]
+    (assoc jig
+           :center [x y]
+           :bbox {:x x :y y :width width :height height})))
 
 (defn polygon
   "Polygon is not really supported yet."
