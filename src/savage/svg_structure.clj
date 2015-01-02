@@ -203,5 +203,5 @@
           y-offset (- center-y old-y)
           join (fn [[x y]] (str (+ x x-offset) "," (+ y y-offset)))]
       (assoc-record
-        this :attrs
-        (assoc (:attrs this) :points (s/join " " (map-points this join)))))))
+        this :attrs :points
+        (s/join " " (map-points this join))))))
