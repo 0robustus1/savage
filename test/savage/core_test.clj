@@ -18,6 +18,20 @@
       (is (some #{relative-circle} (:children root))
           "Contains the relatively created circle"))))
 
+(deftest polyline-geometry
+  (let [attrs {:points "0,0 10,5 0,10 0,0"}
+        shape (polyline :points (:points attrs))]
+    (testing "below-center-from should move correctly"
+      (let [relative (below-center-from shape shape 5)
+            expected-attrs {:points "0,5 10,10 0,15 0,5"}
+            expected (polyline :points (:points expected-attrs))]
+        (is (= relative expected))))
+    (testing "above-center-from should move correctly"
+      (let [relative (above-center-from shape shape 5)
+            expected-attrs {:points  "0,-5 10,0 0,5 0,-5"}
+            expected (polyline :points (:points expected-attrs))]
+        (is (= relative expected))))))
+
 (deftest polygon-geometry
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
         shape (polygon :points (:points attrs))
