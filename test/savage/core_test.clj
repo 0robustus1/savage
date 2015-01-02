@@ -17,3 +17,12 @@
                     (above-center-from some-circle some-circle 5))]
       (is (some #{relative-circle} (:children root))
           "Contains the relatively created circle"))))
+
+(deftest polygon-geometry
+  (let [attrs {:points "0,0 10,5 0,10 0,0"}
+        shape (polygon :points (:points attrs))
+        relative (right-of-center-from shape shape 5)
+        expected-attrs {:points "5,0 15,5 5,10 5,0"}
+        expected (polygon :points (:points expected-attrs))]
+    (testing "relativity should move correctly"
+      (is (= relative expected)))))
