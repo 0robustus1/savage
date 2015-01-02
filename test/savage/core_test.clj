@@ -34,9 +34,14 @@
 
 (deftest polygon-geometry
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
-        shape (polygon :points (:points attrs))
-        relative (right-of-center-from shape shape 5)
-        expected-attrs {:points "5,0 15,5 5,10 5,0"}
-        expected (polygon :points (:points expected-attrs))]
-    (testing "relativity should move correctly"
-      (is (= relative expected)))))
+        shape (polygon :points (:points attrs))]
+    (testing "right-of-center-from should move correctly"
+      (let [relative (right-of-center-from shape shape 5)
+            expected-attrs {:points "5,0 15,5 5,10 5,0"}
+            expected (polygon :points (:points expected-attrs))]
+        (is (= relative expected))))
+    (testing "left-of-center-from should move correctly"
+      (let [relative (left-of-center-from shape shape 5)
+            expected-attrs {:points  "-5,0 5,5 -5,10 -5,0"}
+            expected (polygon :points (:points expected-attrs))]
+        (is (= relative expected))))))
