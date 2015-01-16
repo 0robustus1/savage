@@ -1,6 +1,6 @@
 (ns savage.dsl
   (:require [savage.helper :refer :all]
-            [savage.svg-structure :as svg]
+            [savage.svg-structure :as svg :refer [adjust-center]]
             [clojure.string :as s]))
 
 ;; Helper from Structures
@@ -8,7 +8,9 @@
   [a-ns & fn-list]
   `(do
      ~@(for [name fn-list]
-         `(def ~name ~(symbol (str a-ns "/" name))) )))
+         (let [nsd-name# (symbol (str a-ns "/" name))]
+           (print (meta nsd-name#))
+         `(def ~name (with-meta ~nsd-name# (meta ~nsd-name#)))))))
 
 (defmacro expose-structures []
   `(expose savage.dsl
@@ -105,3 +107,36 @@
     (assoc jig
            :center [x y]
            :bbox {:x x :y y :width width :height height})))
+
+(defn adjust-position-relatively
+  "Returns a redefined shape by repositioning it according to a source and an
+  offset. It utilizes the virtual center-representation of a svg-shape."
+  [shape
+   {[source-center-x source-center-y] :center}
+   [offset-x offset-y] ]
+  (adjust-center shape
+    [(+ source-center-x offset-x) (+ source-center-y offset-y)]))
+
+(defn left-of-center-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the x-axis of source (decreases the x-value)."
+  [source target x-offset]
+  (adjust-position-relatively target source [(* -1 x-offset) 0]))
+
+(defn right-of-center-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the x-axis of source (increases the x-value)."
+  [source target x-offset]
+  (adjust-position-relatively target source [x-offset 0]))
+
+(defn above-center-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the y-axis of source (decreases the y-value)."
+  [source target y-offset]
+  (adjust-position-relatively target source [0 (* -1 y-offset)]))
+
+(defn below-center-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the y-axis of source (increases the y-value)."
+  [source target y-offset]
+  (adjust-position-relatively target source [0 y-offset]))
