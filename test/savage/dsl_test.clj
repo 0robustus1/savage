@@ -30,9 +30,9 @@
 (deftest create-polyline
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
         shape (polyline :points (:points attrs))
-        expected (svg/->Polyline :polyline [] attrs
-                                 [5 5]
-                                 {:x 5 :y 5 :width 10 :height 10})]
+        expected (svg/make-shape :polyline [] attrs
+                                 :center [5 5]
+                                 :bbox {:x 5 :y 5 :width 10 :height 10})]
     (testing "creation should set center correctly"
       (is (= (:center shape) (:center expected))))
     (testing "creation should set bbox correctly"
@@ -41,9 +41,9 @@
 (deftest create-polygon
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
         shape (polygon :points (:points attrs))
-        expected (svg/->Polygon :polygon [] attrs
-                                 [5 5]
-                                 {:x 5 :y 5 :width 10 :height 10})]
+        expected (svg/make-shape :polygon attrs []
+                                 :center [5 5]
+                                 :bbox {:x 5 :y 5 :width 10 :height 10})]
     (testing "creation should set center correctly"
       (is (= (:center shape) (:center expected))))
     (testing "creation should set bbox correctly"

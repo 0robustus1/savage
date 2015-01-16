@@ -37,9 +37,8 @@
         y (or (:y attrs) 0)
         width (:width attrs)
         height (:height attrs)]
-    (svg/->Rect :rect [] attrs
-            [x y]
-            {:x x :y y :width width :height height})))
+    (svg/make-shape :rect attrs [] :center [x y]
+                    :bbox {:x x :y y :width width :height height})))
 
 (defn circle
   "Represents a svg-circle shape. This shape has :cx, :cy and :r as mandatory
@@ -50,9 +49,8 @@
         y (or (:cy attrs) 0)
         width (* (:r attrs) 2)
         height width]
-    (svg/->Circle :circle [] attrs
-              [x y]
-              {:x x :y y :width width :height height})))
+    (svg/make-shape :circle attrs [] :center [x y]
+              :bbox {:x x :y y :width width :height height})))
 
 (defn ellipse
   "Represents a svg-ellipse shape. This shape has :cx, :cy, :rx and :ry as
@@ -64,9 +62,8 @@
         y (or (:cy attrs) 0)
         width (* (:rx attrs) 2)
         height (* (:ry attrs) 2)]
-    (svg/->Ellipse :ellipse [] attrs
-               [x y]
-               {:x x :y y :width width :height height})))
+    (svg/make-shape :ellipse attrs [] :center [x y]
+               :bbox {:x x :y y :width width :height height})))
 
 (defn line
   "Represents a svg-line shape. This shape has :x1, :x2, :y1 and :y2 as
@@ -80,16 +77,15 @@
         height (- (attrs :y2 0) (attrs :y1 0))
         x (+ min-x (/ width 2))
         y (+ min-y (/ height 2))]
-    (svg/->Line :line [] attrs
-            [x y]
-            {:x x :y y :width width :height height})))
+    (svg/make-shape :line [] attrs :center [x y]
+            :bbox {:x x :y y :width width :height height})))
 
 (defn polyline
   "Represents a svg-polyline shape. This shape has :points as mandatory attrs
   key."
   [& rest]
   (let [attrs  (apply hash-map rest)
-        jig (svg/->Polyline :polyline [] attrs [] {})
+        jig (svg/make-shape :polyline attrs [])
         points (svg/extracted-points jig)
         [x y] (svg/positional-center jig)
         [width height] (svg/dimensions jig)]
@@ -102,7 +98,7 @@
   key."
   [& rest]
   (let [attrs  (apply hash-map rest)
-        jig (svg/->Polygon :polygon [] attrs [] {})
+        jig (svg/make-shape :polygon attrs [])
         points (svg/extracted-points jig)
         [x y] (svg/positional-center jig)
         [width height] (svg/dimensions jig)]

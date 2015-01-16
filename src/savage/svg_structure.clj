@@ -3,9 +3,17 @@
             [clojure.string :as s]
             [clojure.template :refer [apply-template]]))
 
+(defrecord Shape [element-type children attrs center bbox])
 (defrecord SVG [element-type attrs children])
+
 (defn width [svg-structure] (:width (:attrs svg-structure)))
 (defn height [svg-structure] (:height (:attrs svg-structure)))
+
+(defn make-shape
+  [element-type attrs children & {:keys [center bbox]}]
+  (->Shape element-type
+    (or children '()) (or attrs {})
+    (or center [0 0]) (or bbox {:x 0 :y 0 :width 0 :height 0})))
 
 (defprotocol AdjustGeometricalMetadata
   (update-center-from-bbox [this])
