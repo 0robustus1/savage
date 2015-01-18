@@ -24,3 +24,42 @@
         xml (export-svg res)]
     (spit output-file xml)
     res))
+
+(defn- svg-rel?
+  [key]
+  (#{:above-center-from :below-center-from
+     :left-of-center-from :right-of-center-from} key))
+
+(defn- svg-cons?
+  [key]
+  (#{:rect :circle :ellipse :line :polyline :polygon} key))
+
+(defn- svg-key?
+  [key]
+  (or (svg-rel? key) (svg-cons? key)))
+
+(defn- svg-sym
+  [key]
+  (find-var (symbol (str 'savage.dsl "/" (name key)))))
+
+(defn- svg-apply
+  [form]
+  (or
+    (when-let [key (and (vector? form) (first form))]
+      (when (svg-key? key)
+        (cond
+          (svg-cons? key) (apply (svg-sym key) (rest form))
+          (svg-rel? key) (let [[base target & [:by offset]] (rest form)]
+                           ((svg-sym key) (svg-apply base) (svg-apply target)
+                            (or offset 0))))))
+    form))
+
+(defn- svg-children
+  [[form & _rest-forms :as forms]]
+  (if (vector? form)
+    (map svg-apply forms)
+    (svg-apply forms)))
+
+(defn make-svg
+  [svg-attrs & forms]
+  (apply dsl/svg svg-attrs (svg-children forms)))
