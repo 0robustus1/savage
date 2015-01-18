@@ -3,19 +3,6 @@
             [savage.svg-structure :as svg :refer [adjust-center]]
             [clojure.string :as s]))
 
-;; Helper from Structures
-(defmacro expose
-  [a-ns & fn-list]
-  `(do
-     ~@(for [name fn-list]
-         (let [nsd-name# (symbol (str a-ns "/" name))]
-           (print (meta nsd-name#))
-         `(def ~name (with-meta ~nsd-name# (meta ~nsd-name#)))))))
-
-(defmacro expose-structures []
-  `(expose savage.dsl
-          ~'rect ~'circle ~'ellipse ~'line ~'polyline ~'polygon ~'svg))
-
 (defn svg
   "Creates a svg. Needs mandatory :width and :height arguments in the
   attrs-map. Children should be svg-shape/structure forms."
