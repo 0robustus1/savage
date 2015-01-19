@@ -11,7 +11,62 @@ sense of variables and objects).
 
 ## Usage
 
-Will follow.
+There are basically two versions of using savage. The one is a vectorized dsl
+(which is the preferred version of using savage) and the other one is a set of
+functions to create a svg. They are basically equivalent, as the vectorized dsl
+is translated into function calls to these functions.
+
+In order to use the vectorized-version you might want to require
+`'savage.core`.  To use the functional version requiring
+`'savage.svg-structure` is the way to go.
+
+### Vectorized DSL
+
+`use` `'savage.core`.
+
+- A basic example, which will place a rectangle into the center of the canvas.
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"])
+  ```
+
+- Place a circle relative to a rectangle. The `:by 25`
+  is optional and will default to zero.
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    (let [rectangle [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"]]
+      [:left-of-center-from rectangle [:circle :r 5] :by 25]))
+  ```
+
+  - Additionally one can use `:above-center-from`, `:below-center-from` and
+    `:right-of-center-from`.
+
+
+### Functional API
+
+`use` `'savage.svg-structure`.
+
+- A basic example, which will place a rectangle into the center of the canvas.
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    (rect :x 22 :width 20 :y 22 :height 20 :fill "black"))
+  ```
+
+- Place a circle relative to a rectangle. The `:by 25`
+  is optional and will default to zero.
+
+  ```clojure
+  (svg {:width 64 :height 64}
+    (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
+    (left-of-center-from (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
+      (:circle :r 5) 25]))
+  ```
+
+  - Additionally one can use `above-center-from`, `below-center-from` and
+    `right-of-center-from`.
 
 ## License
 
