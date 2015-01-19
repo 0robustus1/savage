@@ -1,5 +1,7 @@
 # savage
 
+[![Build Status](https://travis-ci.org/0robustus1/savage.svg?branch=master)](https://travis-ci.org/0robustus1/savage)
+
 **s**a**v**a**g**e is a dsl for svg. A dsl (domain specific language) takes a
 domain and allows the developer to write a program/definition with words and
 syntax from that domain. As clojure provides a real nice macro system (as only
