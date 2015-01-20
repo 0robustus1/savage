@@ -95,7 +95,7 @@
            :center [x y]
            :bbox {:x x :y y :width width :height height})))
 
-(defn adjust-position-relatively
+(defn- adjust-position-relatively
   "Returns a redefined shape by repositioning it according to a source and an
   offset. It utilizes the virtual center-representation of a svg-shape."
   [shape
