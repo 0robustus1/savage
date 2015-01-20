@@ -104,6 +104,13 @@
   (adjust-center shape
     [(+ source-center-x offset-x) (+ source-center-y offset-y)]))
 
+(defn- spaced-offset
+  "Calculates the spaced offset based on two dimension-value.
+  Usually they represent either height or width of source
+  and target."
+  [base-offset dimension other-dimension]
+  (+ base-offset (/ dimension 2) (/ other-dimension 2)))
+
 (defn left-of-center-from
   "Returns redefined target for adjusted relative position. Redefines by
   applying the offset to the x-axis of source (decreases the x-value)."
@@ -127,3 +134,63 @@
   applying the offset to the y-axis of source (increases the y-value)."
   [source target y-offset]
   (adjust-position-relatively target source [0 y-offset]))
+
+(defn left-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the x-axis of source (decreases the x-value)."
+  ([source target x-offset]
+   (left-from source target x-offset :center))
+  ([source target x-offset positioning]
+   (cond
+     (= positioning :center)
+     (adjust-position-relatively target source [(* -1 x-offset) 0])
+     (= positioning :space)
+     (let [offset (+ x-offset
+                     (/ (-> source :bbox :width) 2)
+                     (/ (-> target :bbox :width) 2))]
+       (adjust-position-relatively target source [(* -1 offset) 0])))))
+
+(defn right-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the x-axis of source (increases the x-value)."
+  ([source target x-offset]
+   (right-from source target x-offset :center))
+  ([source target x-offset positioning]
+   (cond
+     (= positioning :center)
+     (adjust-position-relatively target source [x-offset 0])
+     (= positioning :space)
+     (let [offset (+ x-offset
+                     (/ (-> source :bbox :width) 2)
+                     (/ (-> target :bbox :width) 2))]
+       (adjust-position-relatively target source [offset 0])))))
+
+(defn above-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the y-axis of source (decreases the y-value)."
+  ([source target y-offset]
+   (above-from source target y-offset :center))
+  ([source target y-offset positioning]
+   (cond
+     (= positioning :center)
+     (adjust-position-relatively target source [0 (* -1 y-offset)])
+     (= positioning :space)
+     (let [offset (+ y-offset
+                     (/ (-> source :bbox :height) 2)
+                     (/ (-> target :bbox :height) 2))]
+       (adjust-position-relatively target source [0 (* -1 offset)])))))
+
+(defn below-from
+  "Returns redefined target for adjusted relative position. Redefines by
+  applying the offset to the y-axis of source (increases the y-value)."
+  ([source target y-offset]
+   (below-from source target y-offset :center))
+  ([source target y-offset positioning]
+   (cond
+     (= positioning :center)
+     (adjust-position-relatively target source [0 y-offset])
+     (= positioning :space)
+     (let [offset (+ y-offset
+                     (/ (-> source :bbox :height) 2)
+                     (/ (-> target :bbox :height) 2))]
+       (adjust-position-relatively target source [0 offset])))))
