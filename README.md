@@ -39,11 +39,11 @@ In order to use the vectorized-version you might want to require
   ```clojure
   (make-svg {:width 64 :height 64}
     (let [rectangle [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"]]
-      [:left-of-center-from rectangle [:circle :r 5] :by 25]))
+      [:left-from rectangle [:circle :r 5] :by 25]))
   ```
 
-  - Additionally one can use `:above-center-from`, `:below-center-from` and
-    `:right-of-center-from`.
+  - Additionally to `:left-from` one can use `:above-from`, `:below-from` and
+    `:right-from`.
 
 
 ### Functional API
@@ -63,12 +63,12 @@ In order to use the vectorized-version you might want to require
   ```clojure
   (svg {:width 64 :height 64}
     (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
-    (left-of-center-from (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
+    (left-from (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
       (:circle :r 5) 25]))
   ```
 
-  - Additionally one can use `above-center-from`, `below-center-from` and
-    `right-of-center-from`.
+  - Additionally to `left-from` one can use `above-from`, `below-from` and
+    `right-from`.
 
 ## License
 
