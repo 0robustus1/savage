@@ -111,30 +111,6 @@
   [base-offset dimension other-dimension]
   (+ base-offset (/ dimension 2) (/ other-dimension 2)))
 
-(defn left-of-center-from
-  "Returns redefined target for adjusted relative position. Redefines by
-  applying the offset to the x-axis of source (decreases the x-value)."
-  [source target x-offset]
-  (adjust-position-relatively target source [(* -1 x-offset) 0]))
-
-(defn right-of-center-from
-  "Returns redefined target for adjusted relative position. Redefines by
-  applying the offset to the x-axis of source (increases the x-value)."
-  [source target x-offset]
-  (adjust-position-relatively target source [x-offset 0]))
-
-(defn above-center-from
-  "Returns redefined target for adjusted relative position. Redefines by
-  applying the offset to the y-axis of source (decreases the y-value)."
-  [source target y-offset]
-  (adjust-position-relatively target source [0 (* -1 y-offset)]))
-
-(defn below-center-from
-  "Returns redefined target for adjusted relative position. Redefines by
-  applying the offset to the y-axis of source (increases the y-value)."
-  [source target y-offset]
-  (adjust-position-relatively target source [0 y-offset]))
-
 (defn- adjust-spaced-position-relatively
   [source target base-offset positioning dimension sign]
   (cond

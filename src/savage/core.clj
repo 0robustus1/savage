@@ -27,8 +27,7 @@
 
 (defn- svg-rel?
   [key]
-  (#{:above-center-from :below-center-from
-     :left-of-center-from :right-of-center-from} key))
+  (#{:above-from :below-from :left-from :right-from} key))
 
 (defn- svg-cons?
   [key]
