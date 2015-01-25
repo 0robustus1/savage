@@ -4,10 +4,27 @@
             [savage.helper :refer :all]
             [savage.dsl :as dsl]))
 
+(defn- us-format
+  "Basically the same as 'format' but enforce US-Locale"
+    ^String  [fmt & args]
+    (String/format java.util.Locale/US fmt (to-array args)))
+
+(defn- filter-for-decimal
+  "Traverses the map and returns every fractional/rational
+  number as a decimal-string otherwise as integer-string."
+  [coll]
+  (let [filter-fn
+        (fn [[key val]]
+          [key (cond
+                 (ratio? val) (us-format "%.3f" (bigdec val))
+                 (decimal? val) (us-format "%d" val)
+                 :else val)])]
+    (into (empty coll) (map filter-fn coll))))
+
 (defn- xml-form-child
   "Traverses the children-tree and returns xml-write syntax."
   [child]
-  [(:element-type child) (:attrs child)
+  [(:element-type child) (filter-for-decimal (:attrs child))
    (if (:children child)
      (map xml-form-child (:children child) []))])
 
