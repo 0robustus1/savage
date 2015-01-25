@@ -66,7 +66,7 @@
         height (- (attrs :y2 0) (attrs :y1 0))
         x (+ min-x (/ width 2))
         y (+ min-y (/ height 2))]
-    (svg/make-shape :line [] attrs :center [x y]
+    (svg/make-shape :line attrs [] :center [x y]
             :bbox {:x x :y y :width width :height height})))
 
 (defn polyline
