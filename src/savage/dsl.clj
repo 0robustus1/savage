@@ -139,7 +139,9 @@
   [source target base-offset positioning dimension sign]
   (cond
     (= positioning :center)
-    (adjust-position-relatively target source [(* sign base-offset) 0])
+    (adjust-position-relatively target source (if (= dimension :width)
+                                                [(* sign base-offset) 0]
+                                                [0 (* sign base-offset)]))
     (= positioning :space)
     (let [offset (+ base-offset
                     (/ (-> source :bbox dimension) 2)
