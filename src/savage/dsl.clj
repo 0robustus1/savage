@@ -113,19 +113,16 @@
 
 (defn- adjust-spaced-position-relatively
   [source target base-offset positioning dimension sign]
-  (cond
-    (= positioning :center)
-    (adjust-position-relatively target source (if (= dimension :width)
-                                                [(* sign base-offset) 0]
-                                                [0 (* sign base-offset)]))
-    (= positioning :space)
-    (let [offset (+ base-offset
+  (let [offset (cond
+                 (= positioning :center) base-offset
+                 (= positioning :space)
+                 (+ base-offset
                     (/ (-> source :bbox dimension) 2)
-                    (/ (-> target :bbox dimension) 2))
-          center (if (= dimension :width)
-                   [(* sign offset) 0]
-                   [0 (* sign offset)])]
-      (adjust-position-relatively target source center))))
+                    (/ (-> target :bbox dimension) 2)))
+        center (cond
+                 (= dimension :width) [(* sign offset) 0]
+                 (= dimension :height) [0 (* sign offset)])]
+    (adjust-position-relatively target source center)))
 
 (defn left-from
   "Returns redefined target for adjusted relative position. Redefines by
