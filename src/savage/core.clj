@@ -44,17 +44,21 @@
 
 (defn- svg-rel?
   [key]
+  "Tests whether the key matches a svg-relativity function."
   (#{:above-from :below-from :left-from :right-from} key))
 
 (defn- svg-cons?
+  "Tests whether the key matches a svg-construct/structure."
   [key]
   (#{:rect :circle :ellipse :line :polyline :polygon} key))
 
 (defn- svg-key?
+  "Tests whether key is a known svg-function."
   [key]
   (or (svg-rel? key) (svg-cons? key)))
 
 (defn- svg-sym
+  "Retrieves var svg-symbol in the savage.dsl namespace for a given key."
   [key]
   (find-var (symbol (str 'savage.dsl "/" (name key)))))
 
