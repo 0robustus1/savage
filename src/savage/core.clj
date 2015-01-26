@@ -1,5 +1,6 @@
 (ns savage.core
   (:require [xml-writer.core :as xml]
+            [clojure.core.match :refer [match]]
             [clojure.string :as s]
             [savage.helper :refer :all]
             [savage.dsl :as dsl]))
@@ -42,6 +43,8 @@
     (spit output-file xml)
     res))
 
+(declare svg-apply)
+
 (defn- svg-rel?
   [key]
   "Tests whether the key matches a svg-relativity function."
@@ -62,16 +65,33 @@
   [key]
   (find-var (symbol (str 'savage.dsl "/" (name key)))))
 
+(defn- svg-apply-fn-call
+  "Applies a svg-function call to vector-construct form."
+  [[key :as form]]
+  (if (vector? form)
+    (when (svg-key? key)
+      (cond
+        (svg-cons? key) (apply (svg-sym key) (rest form))
+        (svg-rel? key) (let [[base target & [:by offset]] (rest form)]
+                         ((svg-sym key) (svg-apply base) (svg-apply target)
+                          (or offset 0)))))
+    form))
+
+(defn- svg-apply-specials
+  [form]
+  (match
+    form
+    [:line :from source :to target & attrs]
+    (let [[x1 y1] (:center (svg-apply source))
+          [x2 y2] (:center (svg-apply target))]
+      (into [:line :x1 x1 :y1 y1 :x2 x2 :y2 y2] attrs))
+    :else form))
+
 (defn- svg-apply
   [form]
   (or
     (when-let [key (and (vector? form) (first form))]
-      (when (svg-key? key)
-        (cond
-          (svg-cons? key) (apply (svg-sym key) (rest form))
-          (svg-rel? key) (let [[base target & [:by offset]] (rest form)]
-                           ((svg-sym key) (svg-apply base) (svg-apply target)
-                            (or offset 0))))))
+      (-> form svg-apply-specials svg-apply-fn-call))
     form))
 
 (defn- svg-children
