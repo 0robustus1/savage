@@ -85,6 +85,10 @@
     (let [[x1 y1] (:center (svg-apply source))
           [x2 y2] (:center (svg-apply target))]
       (into [:line :x1 x1 :y1 y1 :x2 x2 :y2 y2] attrs))
+    [:default-attrs attrs & forms]
+    (for [form forms]
+      (let [svg-cons (svg-apply form)]
+        (assoc svg-cons :attrs (into attrs (:attrs svg-cons)))))
     :else form))
 
 (defn- svg-apply
@@ -96,9 +100,9 @@
 
 (defn- svg-children
   [[form & _rest-forms :as forms]]
-  (if (vector? form)
-    (map svg-apply forms)
-    (svg-apply forms)))
+  (flatten (if (vector? form)
+             (map svg-apply forms)
+             (svg-apply forms))))
 
 (defn make-svg
   [svg-attrs & forms]
