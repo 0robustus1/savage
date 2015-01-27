@@ -14,9 +14,10 @@ sense of variables and objects).
 ## Usage
 
 There are basically two versions of using savage. The one is a vectorized dsl
-(which is the preferred version of using savage) and the other one is a set of
-functions to create a svg. They are basically equivalent, as the vectorized dsl
-is translated into function calls to these functions.
+(which is the preferred version of using savage) and the other one is a set
+of functions to create a svg. They are not equivalent in usage as the
+vectorized dsl supports some nicer-syntax features the other one doesn't.
+However they should be equivalent in function.
 
 In order to use the vectorized-version you might want to require
 `'savage.core`.  To use the functional version requiring
@@ -45,6 +46,42 @@ In order to use the vectorized-version you might want to require
   - Additionally to `:left-from` one can use `:above-from`, `:below-from` and
     `:right-from`.
 
+There are a few additional features, which are only available inside
+of the vectorized dsl:
+
+- Draw a line between two other shapes:
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    (let [rectangle [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"]
+          circle [:circle :x 53 :y :5 :r 13]]
+      [:line :from rectangle :to circle]))
+  ```
+
+- Provide default attributes to multiple shapes at once.
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    (let [rectangle [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"]]
+      [:default-attrs {:stroke "white" :stroke-width "1.5"}
+       [:left-from rectangle [:circle :r 2] :by 5]
+       [:left-from rectangle [:circle :r 2] :by 10]
+       [:left-from rectangle [:circle :r 2] :by 17]
+       [:left-from rectangle [:circle :r 2] :by 25]]))
+  ```
+
+- Combine two relativity calls. The target shape (in this case
+  `[:circle :r 2]`) only needs to be provided once.
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    [:left-from [:rect :width 10 :height 22 :x 25] [:circle :r 2] :by 5
+     :and
+     :above-from [:rect :x 15 :y 25 :width 10 :height 10] :by 5]
+       [:left-from rectangle [:circle :r 2] :by 10]
+       [:left-from rectangle [:circle :r 2] :by 17]
+       [:left-from rectangle [:circle :r 2] :by 25])
+  ```
 
 ### Functional API
 
