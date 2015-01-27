@@ -89,6 +89,22 @@
     (for [form forms]
       (let [svg-cons (svg-apply form)]
         (assoc svg-cons :attrs (into attrs (:attrs svg-cons)))))
+    [(rel :guard svg-rel?) source target
+     :and
+     (o-rel :guard svg-rel?) o-source]
+      [o-rel o-source [rel source target]]
+    [(rel :guard svg-rel?) source target :by n
+     :and
+     (o-rel :guard svg-rel?) o-source]
+      [o-rel o-source [rel source target :by n]]
+    [(rel :guard svg-rel?) source target
+     :and
+     (o-rel :guard svg-rel?) o-source :by n]
+      [o-rel o-source [rel source target] :by n]
+    [(rel :guard svg-rel?) source target :by n
+     :and
+     (o-rel :guard svg-rel?) o-source :by o-n]
+      [o-rel o-source [rel source target :by n] :by o-n]
     :else form))
 
 (defn- svg-apply
