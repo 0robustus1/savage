@@ -98,11 +98,14 @@
 (defn- adjust-position-relatively
   "Returns a redefined shape by repositioning it according to a source and an
   offset. It utilizes the virtual center-representation of a svg-shape."
-  [shape
+  [{[target-center-x target-center-y] :center :as shape}
    {[source-center-x source-center-y] :center}
-   [offset-x offset-y] ]
-  (adjust-center shape
-    [(+ source-center-x offset-x) (+ source-center-y offset-y)]))
+   [offset-x offset-y axis]]
+  (adjust-center
+    shape
+    (cond
+      (= axis :x) [(+ source-center-x offset-x) target-center-y]
+      (= axis :y) [target-center-x (+ source-center-y offset-y)])))
 
 (defn- spaced-offset
   "Calculates the spaced offset based on two dimension-value.
@@ -120,8 +123,8 @@
                     (/ (-> source :bbox dimension) 2)
                     (/ (-> target :bbox dimension) 2)))
         center (cond
-                 (= dimension :width) [(* sign offset) 0]
-                 (= dimension :height) [0 (* sign offset)])]
+                 (= dimension :width) [(* sign offset) 0 :x]
+                 (= dimension :height) [0 (* sign offset) :y])]
     (adjust-position-relatively target source center)))
 
 (defn left-from
