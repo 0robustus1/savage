@@ -98,27 +98,27 @@
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x -15/2 :y 10 :width 10 :height 10)
+          expected (rect :x -15/2 :y 0 :width 10 :height 10)
           relative (left-from shape other offset :space)]
       (is (= relative expected))))
   (testing "right-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x 55/2 :y 10 :width 10 :height 10)
+          expected (rect :x 55/2 :y 0 :width 10 :height 10)
           relative (right-from shape other offset :space)]
       (is (= relative expected))))
   (testing "above-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x 10 :y -15/2 :width 10 :height 10)
+          expected (rect :x 0 :y -15/2 :width 10 :height 10)
           relative (above-from shape other offset :space)]
       (is (= relative expected))))
   (testing "below-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x 10 :y 55/2 :width 10 :height 10)
+          expected (rect :x 0 :y 55/2 :width 10 :height 10)
           relative (below-from shape other offset :space)]
       (is (= relative expected)))))
