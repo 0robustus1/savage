@@ -16,12 +16,14 @@
                                   (:height attrs)))
              children))
 
+(def rect-default-attrs {:x 0 :y 0})
+
 (defn rect
   "Represents a svg-rect shape. This shape has :x, :y, :width and :height as
   mandatory keys. If, however, :x or :y are not supplied, they'll default to
   0."
   [& rest]
-  (let [attrs (apply hash-map rest)
+  (let [attrs (into rect-default-attrs (apply hash-map rest))
         x (or (:x attrs) 0)
         y (or (:y attrs) 0)
         width (:width attrs)
@@ -29,11 +31,13 @@
     (svg/make-shape :rect attrs [] :center [x y]
                     :bbox {:x x :y y :width width :height height})))
 
+(def circle-default-attrs {:cx 0 :cy 0})
+
 (defn circle
   "Represents a svg-circle shape. This shape has :cx, :cy and :r as mandatory
   keys. If, however, :cx or :cy are not supplied they'll default to 0."
   [& rest]
-  (let [attrs (apply hash-map rest)
+  (let [attrs (into circle-default-attrs (apply hash-map rest))
         x (or (:cx attrs) 0)
         y (or (:cy attrs) 0)
         width (* (:r attrs) 2)
@@ -41,12 +45,14 @@
     (svg/make-shape :circle attrs [] :center [x y]
               :bbox {:x x :y y :width width :height height})))
 
+(def ellipse-default-attrs {:cx 0 :cy 0})
+
 (defn ellipse
   "Represents a svg-ellipse shape. This shape has :cx, :cy, :rx and :ry as
   mandatory keys. If, however, :cx or :cy are not supplied they'll default to
   0."
   [& rest]
-  (let [attrs  (apply hash-map rest)
+  (let [attrs  (into ellipse-default-attrs (apply hash-map rest))
         x (or (:cx attrs) 0)
         y (or (:cy attrs) 0)
         width (* (:rx attrs) 2)
@@ -54,12 +60,14 @@
     (svg/make-shape :ellipse attrs [] :center [x y]
                :bbox {:x x :y y :width width :height height})))
 
+(def line-default-attrs {:x1 0 :x2 0 :y1 0 :y2 0})
+
 (defn line
   "Represents a svg-line shape. This shape has :x1, :x2, :y1 and :y2 as
   mandatory keys. If however any of the coordinates is not supplied, it will
   default to 0."
   [& rest]
-  (let [attrs  (apply hash-map rest)
+  (let [attrs (into line-default-attrs (apply hash-map rest))
         min-x (min (attrs :x1 0) (attrs :x2 0))
         min-y (min (attrs :y1 0) (attrs :y2 0))
         width (- (attrs :x2 0) (attrs :x1 0))
