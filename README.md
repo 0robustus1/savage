@@ -107,6 +107,37 @@ of the vectorized dsl:
   - Additionally to `left-from` one can use `above-from`, `below-from` and
     `right-from`.
 
+## Supported SVG Elements
+
+Currently savage does not yet support every SVG-Element, as we want to provide
+the special handling capabilities for every element that is integrated into
+the DSL. The currently supported Elements are:
+
+- Shapes:
+  - rect
+  - circle
+  - ellipse
+  - line
+  - polyline
+  - polygon
+
+Support for the following is planned in the very near future:
+
+- Text:
+  - text
+  - tspan
+  - tref
+- Paths:
+  - path
+
+Support for these elements is currently not planned, but might be
+available in the future:
+
+- Text:
+  - textPath
+- Definitions:
+  - marker
+
 ## License
 
 Copyright © 2014 Tim Reddehase
