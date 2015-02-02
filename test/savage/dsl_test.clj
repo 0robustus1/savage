@@ -32,7 +32,7 @@
         shape (polyline :points (:points attrs))
         expected (svg/make-shape :polyline [] attrs
                                  :center [5 5]
-                                 :bbox {:x 5 :y 5 :width 10 :height 10})]
+                                 :bbox {:x 0 :y 0 :width 10 :height 10})]
     (testing "creation should set center correctly"
       (is (= (:center shape) (:center expected))))
     (testing "creation should set bbox correctly"
@@ -43,11 +43,11 @@
         shape (polygon :points (:points attrs))
         expected (svg/make-shape :polygon attrs []
                                  :center [5 5]
-                                 :bbox {:x 5 :y 5 :width 10 :height 10})]
+                                 :bbox {:x 0 :y 0 :width 10 :height 10})]
     (testing "creation should set center correctly"
-      (is (= (:center shape) (:center expected))))
+      (is (= (:center expected) (:center shape))))
     (testing "creation should set bbox correctly"
-      (is (= (:bbox shape) (:bbox expected))))))
+      (is (= (:bbox expected) (:bbox shape))))))
 
 (deftest creation-relativity
   (testing "relative creation of a simple rect-svg"
@@ -72,12 +72,12 @@
       (let [relative (below-from shape shape 5)
             expected-attrs {:points "0,5 10,10 0,15 0,5"}
             expected (polyline :points (:points expected-attrs))]
-        (is (= relative expected))))
+        (is (= expected relative))))
     (testing "above-from should move correctly"
       (let [relative (above-from shape shape 5)
             expected-attrs {:points  "0,-5 10,0 0,5 0,-5"}
             expected (polyline :points (:points expected-attrs))]
-        (is (= relative expected))))))
+        (is (= expected relative))))))
 
 (deftest polygon-geometry
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
@@ -91,34 +91,34 @@
       (let [relative (left-from shape shape 5)
             expected-attrs {:points  "-5,0 5,5 -5,10 -5,0"}
             expected (polygon :points (:points expected-attrs))]
-        (is (= relative expected))))))
+        (is (= expected relative))))))
 
 (deftest spaced-relativity
   (testing "left-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x -15/2 :y 0 :width 10 :height 10)
+          expected (rect :x -10 :y 0 :width 10 :height 10)
           relative (left-from shape other offset :space)]
-      (is (= relative expected))))
+      (is (= expected relative))))
   (testing "right-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x 55/2 :y 0 :width 10 :height 10)
+          expected (rect :x 25 :y 0 :width 10 :height 10)
           relative (right-from shape other offset :space)]
       (is (= relative expected))))
   (testing "above-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x 0 :y -15/2 :width 10 :height 10)
+          expected (rect :x 0 :y -10 :width 10 :height 10)
           relative (above-from shape other offset :space)]
       (is (= relative expected))))
   (testing "below-from in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
-          expected (rect :x 0 :y 55/2 :width 10 :height 10)
+          expected (rect :x 0 :y 25 :width 10 :height 10)
           relative (below-from shape other offset :space)]
-      (is (= relative expected)))))
+      (is (= expected relative)))))

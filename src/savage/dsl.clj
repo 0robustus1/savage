@@ -27,8 +27,9 @@
         x (or (:x attrs) 0)
         y (or (:y attrs) 0)
         width (:width attrs)
-        height (:height attrs)]
-    (svg/make-shape :rect attrs [] :center [x y]
+        height (:height attrs)
+        center [(+ x (/ width 2)) (+ y (/ height 2))]]
+    (svg/make-shape :rect attrs [] :center center
                     :bbox {:x x :y y :width width :height height})))
 
 (def circle-default-attrs {:cx 0 :cy 0})
@@ -38,11 +39,13 @@
   keys. If, however, :cx or :cy are not supplied they'll default to 0."
   [& rest]
   (let [attrs (into circle-default-attrs (apply hash-map rest))
-        x (or (:cx attrs) 0)
-        y (or (:cy attrs) 0)
+        center-x (or (:cx attrs) 0)
+        center-y (or (:cy attrs) 0)
         width (* (:r attrs) 2)
-        height width]
-    (svg/make-shape :circle attrs [] :center [x y]
+        height width
+        x (- center-x (:r attrs))
+        y (- center-y (:r attrs))]
+    (svg/make-shape :circle attrs [] :center [center-x center-y]
               :bbox {:x x :y y :width width :height height})))
 
 (def ellipse-default-attrs {:cx 0 :cy 0})
@@ -84,10 +87,12 @@
   (let [attrs  (apply hash-map rest)
         jig (svg/make-shape :polyline attrs [])
         points (svg/extracted-points jig)
-        [x y] (svg/positional-center jig)
-        [width height] (svg/dimensions jig)]
+        [center-x center-y] (svg/positional-center jig)
+        [width height] (svg/dimensions jig)
+        x (- center-x (/ width 2))
+        y (- center-y (/ height 2))]
     (assoc jig
-           :center [x y]
+           :center [center-x center-y]
            :bbox {:x x :y y :width width :height height})))
 
 (defn polygon
@@ -97,10 +102,12 @@
   (let [attrs  (apply hash-map rest)
         jig (svg/make-shape :polygon attrs [])
         points (svg/extracted-points jig)
-        [x y] (svg/positional-center jig)
-        [width height] (svg/dimensions jig)]
+        [center-x center-y] (svg/positional-center jig)
+        [width height] (svg/dimensions jig)
+        x (- center-x (/ width 2))
+        y (- center-y (/ height 2))]
     (assoc jig
-           :center [x y]
+           :center [center-x center-y]
            :bbox {:x x :y y :width width :height height})))
 
 (defn- adjust-position-relatively

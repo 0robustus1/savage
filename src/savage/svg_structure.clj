@@ -103,9 +103,18 @@
 
 (defmethod update-bbox-from-center ::shape
   [this]
-  (let [[x y] (:center this)
-        [width height] (dimensions this)]
+  (let [[center-x center-y] (:center this)
+        [width height] (dimensions this)
+        x (- center-x (/ width 2))
+        y (- center-y (/ height 2))]
       (assoc this :bbox {:x x :y y :width width :height height})))
+
+(defn- bbox-center
+  "Calculates the center of a bounding box."
+  [bbox]
+  (let [x (+ (:x bbox) (/ (:width bbox) 2))
+        y (+ (:y bbox) (/ (:height bbox) 2))]
+    [x y]))
 
 (defmulti update-geometrical-attrs
   :element-type
@@ -120,16 +129,18 @@
 
 (defmethod update-geometrical-attrs :circle
   [this]
-  (let [bbox (:bbox this)]
+  (let [bbox (:bbox this)
+        [cx cy] (bbox-center bbox)]
     (assoc-record this :attrs
-                  :cx (:x bbox) :cy (:y bbox)
+                  :cx cx :cy cy
                   :r (/ (:width bbox) 2))))
 
 (defmethod update-geometrical-attrs :ellipse
   [this]
-  (let [bbox (:bbox this)]
+  (let [bbox (:bbox this)
+        [cx cy] (bbox-center bbox)]
     (assoc-record this :attrs
-                  :cx (:x bbox) :cy (:y bbox)
+                  :cx cx :cy cy
                   (:rx (/ (:width bbox) 2) :ry (/ (:height bbox) 2)))))
 
 (defmethod update-geometrical-attrs :line
@@ -169,11 +180,3 @@
   [this bbox]
   (-> (assoc this :bbox bbox)
       update-center-from-bbox update-geometrical-attrs))
-
-(defmulti bbox-center
-  :element-type
-  :hierarchy #'shape-hierarchy)
-
-(defmethod bbox-center ::shape
-  [this]
-  [(-> this :bbox :x) (-> this :bbox :y)])
