@@ -65,6 +65,28 @@
       (is (some #{relative-circle} (:children root))
           "Contains the relatively created circle"))))
 
+(deftest line-geometry
+  (let [shape (circle :cx 20 :cy 20 :r 10)
+        other (line :x1 10 :x2 20 :y1 20 :y2 0)]
+    (testing "left-from should move correctly"
+      (let [relative (left-from shape other 10)
+            expected (line :x1 5 :x2 15 :y1 20 :y2 0)]
+        (is (= expected relative))))
+    (testing "right-from should move correctly"
+      (let [relative (right-from shape other 10)
+            expected (line :x1 25 :x2 35 :y1 20 :y2 0)]
+        (is (= expected relative)))))
+  (let [shape (line :x1 20 :x2 0 :y1 40 :y2 0)
+        other (line :x1 10 :x2 20 :y1 20 :y2 0)]
+    (testing "above-from should move correctly"
+      (let [relative (above-from shape other 20)
+            expected (line :x1 10 :x2 20 :y1 10 :y2 -10)]
+        (is (= expected relative))))
+    (testing "below-from should move correctly"
+      (let [relative (below-from shape other 20)
+            expected (line :x1 10 :x2 20 :y1 50 :y2 30)]
+        (is (= expected relative))))))
+
 (deftest polyline-geometry
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
         shape (polyline :points (:points attrs))]

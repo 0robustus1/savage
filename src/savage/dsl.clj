@@ -71,14 +71,14 @@
   default to 0."
   [& rest]
   (let [attrs (into line-default-attrs (apply hash-map rest))
-        min-x (min (attrs :x1 0) (attrs :x2 0))
-        min-y (min (attrs :y1 0) (attrs :y2 0))
-        width (- (attrs :x2 0) (attrs :x1 0))
-        height (- (attrs :y2 0) (attrs :y1 0))
-        x (+ min-x (/ width 2))
-        y (+ min-y (/ height 2))]
-    (svg/make-shape :line attrs [] :center [x y]
-            :bbox {:x x :y y :width width :height height})))
+        [max-x min-x] (max-min [(attrs :x1 0) (attrs :x2 0)])
+        [max-y min-y] (max-min [(attrs :y1 0) (attrs :y2 0)])
+        width (- max-x min-x)
+        height (- max-y min-y)
+        center-x (+ min-x (/ width 2))
+        center-y (+ min-y (/ height 2))]
+    (svg/make-shape :line attrs [] :center [center-x center-y]
+            :bbox {:x min-x :y min-y :width width :height height})))
 
 (defn polyline
   "Represents a svg-polyline shape. This shape has :points as mandatory attrs

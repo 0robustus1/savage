@@ -46,8 +46,10 @@
 
 (defmethod dimensions :line
   [this]
-  (let [width (- (-> this :attrs :x2) (-> this :attrs :x1))
-        height (- (-> this :attrs :y2) (-> this :attrs :y1))]
+  (let [[max-x min-x] (max-min [(-> this :attrs :x1) (-> this :attrs :x2)])
+        [max-y min-y] (max-min [(-> this :attrs :y1) (-> this :attrs :y2)])
+        width (- max-x min-x)
+        height (- max-y min-y)]
     [width height]))
 
 (defmulti extracted-points
@@ -143,14 +145,27 @@
                   :cx cx :cy cy
                   (:rx (/ (:width bbox) 2) :ry (/ (:height bbox) 2)))))
 
+(defn- line-attrs-bbox
+  [this]
+  (let [attrs (:attrs this)
+        [max-x min-x] (max-min [(attrs :x1 0) (attrs :x2 0)])
+        [max-y min-y] (max-min [(attrs :y1 0) (attrs :y2 0)])
+        width (- max-x min-x)
+        height (- max-y min-y)]
+    {:x min-x :y min-y :width width :height height}))
+
 (defmethod update-geometrical-attrs :line
   [this]
-  (let [bbox (:bbox this)]
+  (let [attrs (:attrs this)
+        bbox (:bbox this)
+        old-bbox (line-attrs-bbox this)
+        x-offset (- (:x bbox) (:x old-bbox))
+        y-offset (- (:y bbox) (:y old-bbox))]
     (assoc-record this :attrs
-                  :x1 (- (:x bbox) (/ (:width bbox) 2))
-                  :x2 (+ (:x bbox) (/ (:width bbox) 2))
-                  :y1 (- (:y bbox) (/ (:height bbox) 2))
-                  :y2 (- (:y bbox) (/ (:height bbox) 2)))))
+                  :x1 (+ (:x1 attrs) x-offset)
+                  :x2 (+ (:x2 attrs) x-offset)
+                  :y1 (+ (:y1 attrs) y-offset)
+                  :y2 (+ (:y2 attrs) y-offset))))
 
 (defmethod update-geometrical-attrs ::points-based
   [this]
