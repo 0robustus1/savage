@@ -195,3 +195,28 @@
   [this bbox]
   (-> (assoc this :bbox bbox)
       update-center-from-bbox update-geometrical-attrs))
+
+(defn- qualified-percentage?
+  "Tests whether a coll is a qualified percentage value."
+  [coll]
+  (and (coll? coll)
+       (contains? coll :dimension)
+       (contains? coll :percentage)))
+
+(defn- percentage->absolute
+  "Returns a absolutified percentage value if the value in the key-value pair
+  represents a percentage value."
+  [width height [key val :as attr]]
+  (if (qualified-percentage? val)
+    (let [{:keys [dimension percentage]} val
+          absolute (cond
+                     (= dimension :width) width
+                     (= dimension :height) height)]
+      [key (* absolute (/ percentage 100))])
+    attr))
+
+(defn unfold-percentages
+  "Replaces every percentage value with corresponding absolute value. 100%
+  equals the value of the svg canvas (root-element) in one dimension"
+  [{{:keys [width height]} :attrs} attrs]
+  (into {} (map (partial percentage->absolute width height) attrs)))
