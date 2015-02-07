@@ -80,6 +80,20 @@ will allow us to place a rectangle relative to a circle or something like that.
        [:left-from rectangle [:circle :r 2] :by 25])
   ```
 
+- Provide percentage values (relative to the SVG-elements `width` and `height`
+  attributes) instead of absolute ones. Currently this is only supported for
+  the direct shape vectors (e.g. `:rect`, `:circle`, ...) and not for
+  relationships or even `:default-attrs`.
+
+  ```clojure
+  (make-svg {:width 64 :height 64}
+    [:rect
+    :width {:dimension :width :percentage 10}
+    :height {:dimension :height :percentage 20}
+    :x {:dimension :width :percentage 40}
+    :y {:dimension :height :percentage 30}])
+  ```
+
 ## Supported SVG Elements
 
 Currently savage does not yet support every SVG-Element, as we want to provide
