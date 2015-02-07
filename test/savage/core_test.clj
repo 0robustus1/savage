@@ -3,6 +3,23 @@
             [savage.core :refer :all]
             [savage.dsl :as dsl]))
 
+(deftest percentages-in-elements
+  (let [svg-width 64
+        svg-height 64
+        svg-attrs {:width svg-width :height svg-height}]
+    (testing "creating a rect with a width percentage works"
+      (let [fifty% {:dimension :width :percentage 50}
+            svg (make-svg svg-attrs
+                          [:rect :width fifty% :height 5])
+            rect (-> svg :children first)]
+        (is (= (/ svg-width 2) (-> rect :attrs :width)))))
+    (testing "creating a rect with a y percentage works"
+      (let [ten% {:dimension :height :percentage 10}
+            svg (make-svg svg-attrs
+                          [:rect :width 10 :height 10 :y ten%])
+            rect (-> svg :children first)]
+        (is (= (/ svg-height 10) (-> rect :attrs :y)))))))
+
 (deftest svg-dsl-element
   (testing "creating svg with rect"
     (let [svg-attrs {:width 64 :height 64}

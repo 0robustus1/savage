@@ -3,6 +3,7 @@
             [clojure.core.match :refer [match]]
             [clojure.string :as s]
             [savage.helper :refer :all]
+            [savage.svg-structure :refer [unfold-percentages]]
             [savage.dsl :as dsl]))
 
 (defn- us-format
@@ -67,18 +68,20 @@
 
 (defn- svg-apply-fn-call
   "Applies a svg-function call to vector-construct form."
-  [[key :as form]]
+  [svg [key :as form]]
   (if (vector? form)
     (when (svg-key? key)
       (cond
-        (svg-cons? key) (apply (svg-sym key) (rest form))
+        (svg-cons? key) (let [raw-attrs (apply hash-map (rest form))
+                              attrs (unfold-percentages svg raw-attrs)]
+                          ((svg-sym key) attrs))
         (svg-rel? key) (let [[base target & [:by offset]] (rest form)]
-                         ((svg-sym key) (svg-apply base) (svg-apply target)
+                         ((svg-sym key) (svg-apply svg base) (svg-apply svg target)
                           (or offset 0)))))
     form))
 
 (defn- svg-apply-specials
-  [form]
+  [svg-apply form]
   (match
     form
     [:line :from source :to target & attrs]
@@ -108,18 +111,21 @@
     :else form))
 
 (defn- svg-apply
-  [form]
+  [svg form]
   (or
     (when-let [key (and (vector? form) (first form))]
-      (-> form svg-apply-specials svg-apply-fn-call))
+      (->> form
+          (svg-apply-specials (partial svg-apply svg))
+          (svg-apply-fn-call svg)))
     form))
 
 (defn- svg-children
-  [[form & _rest-forms :as forms]]
+  [svg [form & _rest-forms :as forms]]
   (flatten (if (vector? form)
-             (map svg-apply forms)
-             (svg-apply forms))))
+             (map (partial svg-apply svg) forms)
+             (svg-apply svg forms))))
 
 (defn make-svg
   [svg-attrs & forms]
-  (apply dsl/svg svg-attrs (svg-children forms)))
+  (let [svg (dsl/svg svg-attrs)]
+    (assoc svg :children (svg-children svg forms))))
