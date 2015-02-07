@@ -13,15 +13,12 @@ sense of variables and objects).
 
 ## Usage
 
-There are basically two versions of using savage. The one is a vectorized dsl
-(which is the preferred version of using savage) and the other one is a set
-of functions to create a svg. They are not equivalent in usage as the
-vectorized dsl supports some nicer-syntax features the other one doesn't.
-However they should be equivalent in function.
-
-In order to use the vectorized-version you might want to require
-`'savage.core`.  To use the functional version requiring
-`'savage.svg-structure` is the way to go.
+Instead of building a macro-based DSL (which would transform custom symbols
+into normal function-calls which will then create an internal svg-structure),
+i've decided to go a more classic way - for clojure at least - by
+creating a vectorized dsl. This basically means that one will build vectors
+which will represent either svg-element constructs or expressions about that
+svg-element construct.
 
 ### Vectorized DSL
 
@@ -46,8 +43,8 @@ In order to use the vectorized-version you might want to require
   - Additionally to `:left-from` one can use `:above-from`, `:below-from` and
     `:right-from`.
 
-There are a few additional features, which are only available inside
-of the vectorized dsl:
+Additionally there are the expressions about actual svg element, which
+will allow us to place a rectangle relative to a circle or something like that.
 
 - Draw a line between two other shapes:
 
@@ -82,30 +79,6 @@ of the vectorized dsl:
        [:left-from rectangle [:circle :r 2] :by 17]
        [:left-from rectangle [:circle :r 2] :by 25])
   ```
-
-### Functional API
-
-`use` `'savage.svg-structure`.
-
-- A basic example, which will place a rectangle into the center of the canvas.
-
-  ```clojure
-  (make-svg {:width 64 :height 64}
-    (rect :x 22 :width 20 :y 22 :height 20 :fill "black"))
-  ```
-
-- Place a circle relative to a rectangle. The `:by 25`
-  is optional and will default to zero.
-
-  ```clojure
-  (svg {:width 64 :height 64}
-    (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
-    (left-from (rect :x 22 :width 20 :y 22 :height 20 :fill "black")
-      (:circle :r 5) 25]))
-  ```
-
-  - Additionally to `left-from` one can use `above-from`, `below-from` and
-    `right-from`.
 
 ## Supported SVG Elements
 
