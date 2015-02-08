@@ -49,7 +49,7 @@
 (defn- svg-rel?
   [key]
   "Tests whether the key matches a svg-relativity function."
-  (#{:above-from :below-from :left-from :right-from} key))
+  (#{:above-of :below-of :left-of :right-of} key))
 
 (defn- svg-cons?
   "Tests whether the key matches a svg-construct/structure."

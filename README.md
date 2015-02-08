@@ -37,11 +37,11 @@ svg-element construct.
   ```clojure
   (make-svg {:width 64 :height 64}
     (let [rectangle [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"]]
-      [:left-from rectangle [:circle :r 5] :by 25]))
+      [:left-of rectangle [:circle :r 5] :by 25]))
   ```
 
-  - Additionally to `:left-from` one can use `:above-from`, `:below-from` and
-    `:right-from`.
+  - Additionally to `:left-of` one can use `:above-of`, `:below-of` and
+    `:right-of`.
 
 Additionally there are the expressions about actual svg element, which
 will allow us to place a rectangle relative to a circle or something like that.
@@ -61,10 +61,10 @@ will allow us to place a rectangle relative to a circle or something like that.
   (make-svg {:width 64 :height 64}
     (let [rectangle [:rect :x 22 :width 20 :y 22 :height 20 :fill "black"]]
       [:default-attrs {:stroke "white" :stroke-width "1.5"}
-       [:left-from rectangle [:circle :r 2] :by 5]
-       [:left-from rectangle [:circle :r 2] :by 10]
-       [:left-from rectangle [:circle :r 2] :by 17]
-       [:left-from rectangle [:circle :r 2] :by 25]]))
+       [:left-of rectangle [:circle :r 2] :by 5]
+       [:left-of rectangle [:circle :r 2] :by 10]
+       [:left-of rectangle [:circle :r 2] :by 17]
+       [:left-of rectangle [:circle :r 2] :by 25]]))
   ```
 
 - Combine two relativity calls. The target shape (in this case
@@ -72,12 +72,12 @@ will allow us to place a rectangle relative to a circle or something like that.
 
   ```clojure
   (make-svg {:width 64 :height 64}
-    [:left-from [:rect :width 10 :height 22 :x 25] [:circle :r 2] :by 5
+    [:left-of [:rect :width 10 :height 22 :x 25] [:circle :r 2] :by 5
      :and
-     :above-from [:rect :x 15 :y 25 :width 10 :height 10] :by 5]
-       [:left-from rectangle [:circle :r 2] :by 10]
-       [:left-from rectangle [:circle :r 2] :by 17]
-       [:left-from rectangle [:circle :r 2] :by 25])
+     :above-of [:rect :x 15 :y 25 :width 10 :height 10] :by 5]
+       [:left-of rectangle [:circle :r 2] :by 10]
+       [:left-of rectangle [:circle :r 2] :by 17]
+       [:left-of rectangle [:circle :r 2] :by 25])
   ```
 
 - Provide percentage values (relative to the SVG-elements `width` and `height`

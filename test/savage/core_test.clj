@@ -68,13 +68,13 @@
         top-h [:circle :cx 12 :cy 47/2 :r 4 :stroke-width 0 :fill "white"]
         top-l [:circle :cx 52 :cy 47/2 :r 4 :stroke-width 0 :fill "white"]
 
-        bottom-k [:below-from top-k [:circle :cx 32 :r 4
+        bottom-k [:below-of top-k [:circle :cx 32 :r 4
                   :stroke-width 0 :fill "white"] :by 17]
-        bottom-j [:below-from top-j [:circle :cx 32 :r 4
+        bottom-j [:below-of top-j [:circle :cx 32 :r 4
                   :stroke-width 0 :fill "white"] :by 17]
-        bottom-h [:below-from top-h [:circle :cx 12 :r 4
+        bottom-h [:below-of top-h [:circle :cx 12 :r 4
                   :stroke-width 0 :fill "white"] :by 17]
-        bottom-l [:below-from top-l [:circle :cx 52 :r 4
+        bottom-l [:below-of top-l [:circle :cx 52 :r 4
                   :stroke-width 0 :fill "white"] :by 17]
 
         k-k [:line :from top-k :to bottom-k]

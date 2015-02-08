@@ -152,34 +152,34 @@
                  (= dimension :height) [0 (* sign offset) :y])]
     (adjust-position-relatively target source center)))
 
-(defn left-from
+(defn left-of
   "Returns redefined target for adjusted relative position. Redefines by
   applying the offset to the x-axis of source (decreases the x-value)."
   ([source target x-offset]
-   (left-from source target x-offset :center))
+   (left-of source target x-offset :center))
   ([source target x-offset positioning]
    (adjust-spaced-position-relatively source target x-offset positioning :width -1)))
 
-(defn right-from
+(defn right-of
   "Returns redefined target for adjusted relative position. Redefines by
   applying the offset to the x-axis of source (increases the x-value)."
   ([source target x-offset]
-   (right-from source target x-offset :center))
+   (right-of source target x-offset :center))
   ([source target x-offset positioning]
    (adjust-spaced-position-relatively source target x-offset positioning :width 1)))
 
-(defn above-from
+(defn above-of
   "Returns redefined target for adjusted relative position. Redefines by
   applying the offset to the y-axis of source (decreases the y-value)."
   ([source target y-offset]
-   (above-from source target y-offset :center))
+   (above-of source target y-offset :center))
   ([source target y-offset positioning]
    (adjust-spaced-position-relatively source target y-offset positioning :height -1)))
 
-(defn below-from
+(defn below-of
   "Returns redefined target for adjusted relative position. Redefines by
   applying the offset to the y-axis of source (increases the y-value)."
   ([source target y-offset]
-   (below-from source target y-offset :center))
+   (below-of source target y-offset :center))
   ([source target y-offset positioning]
    (adjust-spaced-position-relatively source target y-offset positioning :height 1)))

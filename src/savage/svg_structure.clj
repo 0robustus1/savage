@@ -89,21 +89,21 @@
         height (apply - (max-min (use-nth 1 points)))]
     [width height]))
 
-(defmulti update-center-from-bbox
+(defmulti update-center-of-bbox
   :element-type
   :hierarchy #'shape-hierarchy)
 
-(defmethod update-center-from-bbox ::shape
+(defmethod update-center-of-bbox ::shape
   [this]
   (assoc this :center
          [(+ (-> this :bbox :x) (/ (-> this :bbox :width) 2))
           (+ (-> this :bbox :y) (/ (-> this :bbox :height) 2))]))
 
-(defmulti update-bbox-from-center
+(defmulti update-bbox-of-center
   :element-type
   :hierarchy #'shape-hierarchy)
 
-(defmethod update-bbox-from-center ::shape
+(defmethod update-bbox-of-center ::shape
   [this]
   (let [[center-x center-y] (:center this)
         [width height] (dimensions this)
@@ -185,7 +185,7 @@
 (defmethod adjust-center ::shape
   [this center]
   (-> (assoc this :center center)
-      update-bbox-from-center update-geometrical-attrs))
+      update-bbox-of-center update-geometrical-attrs))
 
 (defmulti adjust-bbox
   :element-type
@@ -194,7 +194,7 @@
 (defmethod adjust-bbox ::shape
   [this bbox]
   (-> (assoc this :bbox bbox)
-      update-center-from-bbox update-geometrical-attrs))
+      update-center-of-bbox update-geometrical-attrs))
 
 (defn- qualified-percentage?
   "Tests whether a coll is a qualified percentage value."

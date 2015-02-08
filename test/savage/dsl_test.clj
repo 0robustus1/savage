@@ -54,49 +54,49 @@
     (let [some-rect (rect :width 12 :height 6 :x 12 :y 6)
           relative-rect (rect :width 12 :height 6 :x 7 :y 6)
           root (svg {:width 64 :height 64} some-rect
-                    (left-from some-rect some-rect 5))]
+                    (left-of some-rect some-rect 5))]
       (is (some #{relative-rect} (:children root))
           "Contains the relatively created rect")))
   (testing "relative creation should work with negative coordinates"
     (let [some-circle (circle :cx -5 :cy -5 :r 10)
           relative-circle (circle :cx -5 :cy -10 :r 10)
           root (svg {:width 64 :height 64} some-circle
-                    (above-from some-circle some-circle 5))]
+                    (above-of some-circle some-circle 5))]
       (is (some #{relative-circle} (:children root))
           "Contains the relatively created circle"))))
 
 (deftest line-geometry
   (let [shape (circle :cx 20 :cy 20 :r 10)
         other (line :x1 10 :x2 20 :y1 20 :y2 0)]
-    (testing "left-from should move correctly"
-      (let [relative (left-from shape other 10)
+    (testing "left-of should move correctly"
+      (let [relative (left-of shape other 10)
             expected (line :x1 5 :x2 15 :y1 20 :y2 0)]
         (is (= expected relative))))
-    (testing "right-from should move correctly"
-      (let [relative (right-from shape other 10)
+    (testing "right-of should move correctly"
+      (let [relative (right-of shape other 10)
             expected (line :x1 25 :x2 35 :y1 20 :y2 0)]
         (is (= expected relative)))))
   (let [shape (line :x1 20 :x2 0 :y1 40 :y2 0)
         other (line :x1 10 :x2 20 :y1 20 :y2 0)]
-    (testing "above-from should move correctly"
-      (let [relative (above-from shape other 20)
+    (testing "above-of should move correctly"
+      (let [relative (above-of shape other 20)
             expected (line :x1 10 :x2 20 :y1 10 :y2 -10)]
         (is (= expected relative))))
-    (testing "below-from should move correctly"
-      (let [relative (below-from shape other 20)
+    (testing "below-of should move correctly"
+      (let [relative (below-of shape other 20)
             expected (line :x1 10 :x2 20 :y1 50 :y2 30)]
         (is (= expected relative))))))
 
 (deftest polyline-geometry
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
         shape (polyline :points (:points attrs))]
-    (testing "below-from should move correctly"
-      (let [relative (below-from shape shape 5)
+    (testing "below-of should move correctly"
+      (let [relative (below-of shape shape 5)
             expected-attrs {:points "0,5 10,10 0,15 0,5"}
             expected (polyline :points (:points expected-attrs))]
         (is (= expected relative))))
-    (testing "above-from should move correctly"
-      (let [relative (above-from shape shape 5)
+    (testing "above-of should move correctly"
+      (let [relative (above-of shape shape 5)
             expected-attrs {:points  "0,-5 10,0 0,5 0,-5"}
             expected (polyline :points (:points expected-attrs))]
         (is (= expected relative))))))
@@ -104,43 +104,43 @@
 (deftest polygon-geometry
   (let [attrs {:points "0,0 10,5 0,10 0,0"}
         shape (polygon :points (:points attrs))]
-    (testing "right-from should move correctly"
-      (let [relative (right-from shape shape 5)
+    (testing "right-of should move correctly"
+      (let [relative (right-of shape shape 5)
             expected-attrs {:points "5,0 15,5 5,10 5,0"}
             expected (polygon :points (:points expected-attrs))]
         (is (= relative expected))))
-    (testing "left-from should move correctly"
-      (let [relative (left-from shape shape 5)
+    (testing "left-of should move correctly"
+      (let [relative (left-of shape shape 5)
             expected-attrs {:points  "-5,0 5,5 -5,10 -5,0"}
             expected (polygon :points (:points expected-attrs))]
         (is (= expected relative))))))
 
 (deftest spaced-relativity
-  (testing "left-from in spaced mode shall work as expected"
+  (testing "left-of in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
           expected (rect :x -10 :y 0 :width 10 :height 10)
-          relative (left-from shape other offset :space)]
+          relative (left-of shape other offset :space)]
       (is (= expected relative))))
-  (testing "right-from in spaced mode shall work as expected"
+  (testing "right-of in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
           expected (rect :x 25 :y 0 :width 10 :height 10)
-          relative (right-from shape other offset :space)]
+          relative (right-of shape other offset :space)]
       (is (= relative expected))))
-  (testing "above-from in spaced mode shall work as expected"
+  (testing "above-of in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
           expected (rect :x 0 :y -10 :width 10 :height 10)
-          relative (above-from shape other offset :space)]
+          relative (above-of shape other offset :space)]
       (is (= relative expected))))
-  (testing "below-from in spaced mode shall work as expected"
+  (testing "below-of in spaced mode shall work as expected"
     (let [shape (rect :x 10 :y 10 :width 5 :height 5)
           other (rect :width 10 :height 10)
           offset 10
           expected (rect :x 0 :y 25 :width 10 :height 10)
-          relative (below-from shape other offset :space)]
+          relative (below-of shape other offset :space)]
       (is (= expected relative)))))
