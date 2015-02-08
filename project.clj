@@ -1,4 +1,4 @@
-(defproject savage "0.0.6"
+(defproject savage "0.0.7"
   :description "A dsl for writing svg's."
   :url "http://rightsrestricted.com/savage"
   :license {:name "Eclipse Public License"
