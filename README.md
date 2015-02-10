@@ -1,6 +1,10 @@
 # savage
 
 [![Build Status](https://travis-ci.org/0robustus1/savage.svg?branch=master)](https://travis-ci.org/0robustus1/savage)
+[![Project Dependencies](https://www.versioneye.com/user/projects/54d65c2d3ca08495310006c7/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54d65c2d3ca08495310006c7)
+[![Clojars Version](https://img.shields.io/badge/Clojars--Version-0.0.7-blue.svg)](http://clojars.org/savage)
+
+[![Clojars Project](http://clojars.org/savage/latest-version.svg)](http://clojars.org/savage)
 
 **s**a**v**a**g**e is a dsl for svg. A dsl (domain specific language) takes a
 domain and allows the developer to write a program/definition with words and
@@ -10,6 +14,11 @@ languages here. However this dsl is a little different.  It does not only allow
 you to write a *svg* in clojure code but also allows you to make reference
 which were not possible before (because a svg-document does not really have a
 sense of variables and objects).
+
+If you want to read a little bit more about the road we went on to create this
+project you should take a look at this [article][scale-your-crazy] on my blog.
+
+[scale-your-crazy]: https://rightsrestricted.com/2015/02/08/scale-your-crazy/
 
 ## Usage
 
@@ -127,7 +136,7 @@ available in the future:
 
 ## License
 
-Copyright © 2014 Tim Reddehase
+Copyright © 2014-2015 Tim Reddehase
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
